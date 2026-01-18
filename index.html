@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sarkar Ke Liye Paigaam 👑</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; /* Removes blue highlight on tap */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            min-height: 100vh;
+            /* Fix for Android browsers (Chrome/WhatsApp) */
+            min-height: 100dvh; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4, #a18cd1, #fbc2eb);
+            animation: gradientMove 15s ease infinite;
+            z-index: -1;
+            filter: blur(60px);
+        }
+
+        .container {
+            width: 85%;
+            max-width: 380px;
+            z-index: 10;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            padding: 30px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: floatCard 6s ease-in-out infinite;
+        }
+
+        .crown {
+            font-size: 3.5rem;
+            display: block;
+            margin-bottom: 5px;
+            animation: shine 2s infinite alternate;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #d35400;
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: 700;
+            opacity: 0.7;
+        }
+
+        p {
+            color: #333;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 15px;
+            border-radius: 15px;
+            font-weight: 500;
+        }
+
+        .highlight {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        /* Mobile Optimized Buttons */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        button {
+            padding: 16px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            transition: transform 0.1s;
+        }
+
+        .btn-yes {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+            color: white;
+            box-shadow: 0 4px 15px rgba(56, 239, 125, 0.4);
+        }
+
+        .btn-no {
+            background: linear-gradient(45deg, #ff512f, #dd2476);
+            color: white;
+            box-shadow: 0 4px 15px rgba(221, 36, 118, 0.4);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Result Message */
+        #royal-decree {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 15px;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            animation: unfold 0.5s ease-out;
+        }
+
+        /* Confetti Canvas */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @keyframes gradientMove {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes shine {
+            from { transform: scale(1); filter: brightness(100%); }
+            to { transform: scale(1.1); filter: brightness(120%); }
+        }
+
+        @keyframes unfold {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animation"></div>
+    <canvas id="canvas"></canvas>
+
+    <div class="container">
+        <div class="card">
+            <span class="crown">👑</span>
+            <h1>Pranaam Behna Ji</h1>
+            <div class="subtitle">Official Enquiry</div>
+            
+            <p>
+                Sarkar se ek chhota sa sawaal tha...<br>
+                Kya Maharani ji ne <span class="highlight">Dinner (Bhojan)</span> grahan kar liya hai ya abhi bhi nakhre jaari hain?
+            </p>
+
+            <div class="btn-group" id="btn-section">
+                <button class="btn-yes" onclick="submitDecree('yes')">Ji haan, kha liya sevak! 🍲</button>
+                <button class="btn-no" onclick="submitDecree('no')">Nahi, mood nahi hai 😤</button>
+            </div>
+
+            <div id="royal-decree"></div>
+        </div>
+    </div>
+
+    <script>
+        // No internet required script
+        function submitDecree(answer) {
+            const decreeDiv = document.getElementById('royal-decree');
+            const btnSection = document.getElementById('btn-section');
+            const crown = document.querySelector('.crown');
+
+            btnSection.style.display = 'none';
+            decreeDiv.style.display = 'block';
+
+            if (answer === 'yes') {
+                crown.innerHTML = "😴";
+                decreeDiv.innerHTML = "<h3>Dhanya Ho! 🙏</h3><br><p>Chalo badhiya hai. Ab kripya phone side mein rakhein aur <strong>Sleep Mode</strong> mein chale jayein.<br><br><strong>Good Night Behna! ✨</strong></p>";
+                startConfetti();
+            } else {
+                crown.innerHTML = "👩‍🍳";
+                decreeDiv.innerHTML = "<h3>Hukum ki Taameel Ho! 🚨</h3><br><p>Arre re! Bhookha rehne se dimaag aur tez nahi chalta! 😂<br><br><strong>Jaa ke kha lo chup chap! 🍛</strong></p>";
+            }
+        }
+
+        // Lightweight Confetti Logic (Runs on any phone)
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        let w, h, particles = [];
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener("resize", resize);
+        resize();
+
+        function startConfetti() {
+            for(let i=0; i<80; i++) {
+                particles.push({
+                    x: w/2,
+                    y: h/2,
+                    vx: (Math.random() - 0.5) * 15,
+                    vy: (Math.random() - 1) * 15,
+                    size: Math.random() * 8 + 4,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    life: 100
+                });
+            }
+            animate();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, w, h);
+            let active = false;
+            particles.forEach((p, i) => {
+                if(p.life > 0) {
+                    active = true;
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.4; // gravity
+                    p.life--;
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+            if(active) requestAnimationFrame(animate);
+        }
+    </script>
+</body>
+</html>
